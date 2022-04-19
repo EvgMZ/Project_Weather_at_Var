@@ -1,9 +1,6 @@
-from urllib import response
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
 import requests
 from .models import City, Weather
-
+from pygismeteo import Gismeteo
 
 def wttr_weather_get(name_city):
     weather_parameters = {
@@ -27,14 +24,36 @@ def yandex_weather_get(lat, long):
     return response.json()
 
 def main():
-    yandex_weather_get()
     cities = City.objects.all()
     for city in cities:
+        
         result_wttr = wttr_weather_get(city.name)
         temperature_wttr = result_wttr['current_condition'][0]['temp_C']
         weather_wttr = Weather.objects.create(temperature=temperature_wttr, id_city=city, data='wttr')
         weather_wttr.save()
-        result_yandex = yandex_weather_get()
+
+        result_yandex = yandex_weather_get(city.lat, city.long)
         temperature_yandex = result_yandex['fact']['temp']
         waether_yandex = Weather.objects.create(temperature=temperature_yandex, id_city=city, data='yandex')
         waether_yandex.save()
+        #pip install matplotlib
+
+        gm = Gismeteo()
+        city_id = gm.get_id_by_query(city.name)
+        current = gm.current(city_id)
+        temperature_gis = current.temperature.air.c
+        waether_gismeteo = Weather.objects.create(temperature=temperature_gis, id_city=city, data='gismeteo')
+        waether_gismeteo.save()
+        '''
+        cd Project_Weather_at_var
+        source venv/Scripts/activate
+        cd mysite
+        pip install pytgismeteo
+        python manage.py makemigrations
+        1
+        1
+        1
+        1
+        python manage.py migrate
+        python manage.py runserver
+        '''
