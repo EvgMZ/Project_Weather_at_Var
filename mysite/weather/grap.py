@@ -1,3 +1,4 @@
+from tkinter import W
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,17 +13,29 @@ def asd():
     cities = City.objects.all()
     result_wtr  = []
     name_city = []
+    spisok_data = ['yandex', 'wttr', 'gismeteto']
     for city in cities:
         weathers = Weather.objects.filter(id_city=city.id)
-        name_city.append(city.name)
         spisok = []
-        for weather in weathers:
-            spisok.append(float(weather.temperature))
+        for data in spisok_data:
+            weathers = weathers.filter(data=data)
+            for weather in weathers:
+                spisok.append(float(weather.temperature))
+            print(f'{city.name} {data} {spisok}')
+            plt.axis([1, now_day+1,  min(spisok)-2, max(spisok) +2])
+            plt.title(f'{city.name} {count_day}')
+            plt.plot(spisok)
+            plt.savefig(f'{city.name}_{count_day}.png')
+        plt.close()   
         result = {city.id : spisok}
         result_wtr.append(result)
-    msc = result_wtr[0][1]
-    print(msc)
-    plt.axis([1, now_day+1,  min(msc), max(msc)])
-    plt.title(count_day)
-    plt.plot(msc)
-    plt.show()
+    result_wtr[0][1]
+    k = 1
+    '''for i in range(len(result_wtr)):
+        msc = result_wtr[i][k]
+        plt.axis([1, now_day+1,  min(msc), max(msc)])
+        plt.title(f'{name_city[i]} {count_day}')
+        plt.plot(msc)
+        plt.savefig(f'{name_city[i]}_{count_day}.png')
+        #plt.close()
+        k += 1'''

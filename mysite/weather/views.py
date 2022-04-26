@@ -6,3 +6,4 @@ from . import get_weather, grap
 def index(request):
     #get_weather.main()
     grap.asd()
+    return HttpResponse("asd")
