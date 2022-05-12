@@ -48,12 +48,5 @@ def main():
         cd Project_Weather_at_var
         source venv/Scripts/activate
         cd mysite
-        pip install pytgismeteo
-        python manage.py makemigrations
-        1
-        1
-        1
-        1
-        python manage.py migrate
         python manage.py runserver
         '''

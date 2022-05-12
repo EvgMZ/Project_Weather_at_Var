@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from datetime import  datetime
 from .models import Weather, City
-BASE_URL = './media/weather'
+BASE_URL = './media/'
 def asd():
     today = datetime.today()
     month = today.month
@@ -15,7 +15,7 @@ def asd():
     spisok_data = ['yandex', 'wttr', 'gismeteo']
     dict_data = {'yandex': [], 'wttr': [], 'gismeteo': []}
     plt.ioff()
-    cnt_day = [i for i in range(1, 5)]
+    cnt_day = [i for i in range(1, now_day+7)]
     for city in cities:
         weathers = Weather.objects.filter(id_city=city.id)
         for data in spisok_data:
